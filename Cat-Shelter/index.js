@@ -3,39 +3,71 @@ import siteCss from './content/styles/site.css.js';
 import indexHtml from './views/home/index.html.js';
 import addBreedHtml from './views/addBreed.html.js';
 import addCatHtml from './views/addCat.html.js';
+import { v4 as uuid } from 'uuid'
+import fs from 'fs/promises'
 
-const cats = [
-    {
-        id: 1,
-        imageUrl: 'https://media.istockphoto.com/id/1443562748/photo/cute-ginger-cat.jpg?s=612x612&w=0&k=20&c=vvM97wWz-hMj7DLzfpYRmY2VswTqcFEKkC437hxm3Cg=',
-        name: 'Pretty Kitty',
-        breed: 'Bombay Cat',
-        description: 'Dominant and aggressive to other cats. Will probably eat you in your sleep. Very cute tho.',
-    },
-    {
-        id: 2,
-        imageUrl: 'https://media.istockphoto.com/id/1443562748/photo/cute-ginger-cat.jpg?s=612x612&w=0&k=20&c=vvM97wWz-hMj7DLzfpYRmY2VswTqcFEKkC437hxm3Cg=',
-        name: 'Navcho',
-        breed: 'Persian Cat',
-        description: 'A talkative and affectionate cat with striking yellow eyes.',
-    },
-    {
-        id: 3,
-        imageUrl: 'https://media.istockphoto.com/id/1443562748/photo/cute-ginger-cat.jpg?s=612x612&w=0&k=20&c=vvM97wWz-hMj7DLzfpYRmY2VswTqcFEKkC437hxm3Cg=',
-        name: 'Sisa',
-        breed: 'Siamese Cat',
-        description: 'Loves to cuddle and nap. Requires regular grooming for its luxurious coat.',
-    },
-    {
-        id: 4,
-        imageUrl: 'https://media.istockphoto.com/id/1443562748/photo/cute-ginger-cat.jpg?s=612x612&w=0&k=20&c=vvM97wWz-hMj7DLzfpYRmY2VswTqcFEKkC437hxm3Cg=',
-        name: 'Garry',
-        breed: 'Bombay Cat',
-        description: 'Mysterious and elegant. Often found lounging in sunny spots.',
-    },
-];
+
+let cats = [];
+let breeds = [];
+
+initCats()
+initBreads()
 
 const server = http.createServer((req, res) => {
+
+    if (req.method === 'POST' && req.url === '/cats/add-cat') {
+        let body = '';
+
+        req.on('data', chunk => {
+            body += chunk.toString();
+        })
+
+        req.on('end', () => {
+            const data = new URLSearchParams(body);
+
+            cats.push({
+                id: uuid(),
+                ...Object.fromEntries(data.entries())
+            })
+
+            saveCats();
+
+            res.writeHead(301, {
+                'location': '/'
+            })
+
+            res.end()
+        })
+
+        return
+
+    } else if (req.method === 'POST' && req.url === '/cats/add-breed') {
+        let body = '';
+
+        req.on('data', chunk => {
+            body += chunk.toString();
+        })
+
+        req.on('end', () => {
+            const data = new URLSearchParams(body);
+
+           breeds.push({
+            ...Object.fromEntries(data.entries())
+           });
+           
+            saveBreeds();
+            console.log(breeds);
+            
+
+            res.writeHead(301, {
+                'location': '/'
+            })
+
+            res.end()
+        })
+
+        return
+    }
 
     if (req.url === '/styles/site.css') {
         res.writeHead(200, {
@@ -59,7 +91,7 @@ const server = http.createServer((req, res) => {
             res.write(addBreedHtml())
             break
         case '/cats/add-cat':
-            res.write(addCatHtml())
+            res.write(addCatHtml(breeds))
             break
 
         default:
@@ -69,6 +101,27 @@ const server = http.createServer((req, res) => {
 
     res.end();
 })
+
+async function initCats() {
+
+    const catsJson = await fs.readFile('./cats.json', { encoding: 'utf-8' });
+    cats = JSON.parse(catsJson);
+}
+
+async function saveCats() {
+    const catJson = JSON.stringify(cats, null, 2);
+    await fs.writeFile('./cats.json', catJson, { encoding: 'utf-8' });
+}
+
+async function initBreads() {
+    const breedJson = await fs.readFile('./breeds.json', { encoding: 'utf-8' });
+    breeds = JSON.parse(breedJson);
+}
+
+async function saveBreeds(){
+    const breedJson = JSON.stringify(breeds, null, 2);
+    await fs.writeFile('./breeds.json', breedJson, { encoding: 'utf-8' });
+}
 
 server.listen(5000);
 console.log('Server is listening on http://localhost:5000...');
