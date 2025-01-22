@@ -1,12 +1,17 @@
 import { Router } from "express";
-import fs from 'fs';
+import movieService from "../../service/movie-service.js";
+
 
 const homeController = Router();
 
 homeController.get('/', (req, res) => {
-    const data = JSON.parse(fs.readFileSync('./src/config/database.json', 'utf-8'))
+    const movies = movieService.getAll()
 
-    res.render('home', { data })
+    res.render('home', { movies })
+
+    console.log(movies);
+    
+    
 })
 
 homeController.get('/about', (req, res) => res.render('about'));
