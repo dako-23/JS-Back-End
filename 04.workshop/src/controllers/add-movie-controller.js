@@ -6,9 +6,9 @@ const addMovieController = Router();
 addMovieController.get('/create', (req, res) => res.render('create'));
 addMovieController.post('/create', (req, res) => {
 
-    const newMovie = req.body
+    const newMovie = req.body;
 
-    movieService.create(newMovie)
+    movieService.create(newMovie);
 
     res.redirect('/');
 })
@@ -21,7 +21,7 @@ addMovieController.get('/:id/details', (req, res) => {
 
     const movie = movieService.findOne(id);
 
-    res.render('details', { movie })
+    res.render('details', { movie });
 });
 
 export default addMovieController;
