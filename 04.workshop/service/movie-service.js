@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { v4 as uuid } from 'uuid';
+import showRating from '../src/helpers/rating-helper.js';
 
 export default {
     getAll() {
@@ -25,6 +26,8 @@ export default {
         movies.push({
             id,
             ...movieData,
+            showRating: Number(movies.rating),
+
         })
         this.saveMovie(movies)
     }

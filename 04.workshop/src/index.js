@@ -1,6 +1,7 @@
 import express, { urlencoded } from 'express';
 import handlebars from 'express-handlebars';
 import routes from './routes.js';
+import showRating from './helpers/rating-helper.js';
 
 
 const app = express();
@@ -9,6 +10,9 @@ const app = express();
 app.engine('hbs', handlebars.engine(
     {
         extname: 'hbs',
+        helpers: {
+            showRating
+        },
 
     }))
 
