@@ -26,7 +26,6 @@ export default {
             id,
             ...movieData,
         })
-
         this.saveMovie(movies)
     }
 }
