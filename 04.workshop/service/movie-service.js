@@ -1,11 +1,18 @@
 import fs from 'fs'
 import { v4 as uuid } from 'uuid';
-import showRating from '../src/helpers/rating-helper.js';
+
+const dataPath = './src/config/database.json'
 
 export default {
     getAll() {
-        const data = JSON.parse(fs.readFileSync('./src/config/database.json', 'utf-8'))
-        return data
+
+        try {
+            const data = fs.readFileSync(dataPath, 'utf-8');
+            return JSON.parse(data);
+        } catch (err) {
+            return [];
+        }
+
     },
     saveMovie(movie) {
         return fs.writeFileSync('./src/config/database.json', JSON.stringify(movie, null, 2), 'utf-8');

@@ -1,4 +1,4 @@
-import express, { urlencoded } from 'express';
+import express from 'express';
 import handlebars from 'express-handlebars';
 import routes from './routes.js';
 import showRating from './helpers/rating-helper.js';
