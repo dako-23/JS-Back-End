@@ -15,7 +15,7 @@ export default {
 
     },
     saveMovie(movie) {
-        return fs.writeFileSync('./src/config/database.json', JSON.stringify(movie, null, 2), 'utf-8');
+        return fs.writeFileSync(dataPath, JSON.stringify(movie, null, 2), 'utf-8');
     },
     findOne(id) {
 
@@ -33,8 +33,6 @@ export default {
         movies.push({
             id,
             ...movieData,
-            showRating: Number(movies.rating),
-
         })
         this.saveMovie(movies)
     }
