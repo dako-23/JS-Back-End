@@ -14,9 +14,11 @@ addMovieController.post('/create', (req, res) => {
 })
 
 addMovieController.get('/search', (req, res) => {
-    const movies = movieService.getAll();
+    const filter = req.query
 
-    res.render('search', { movies });
+    const movies = movieService.getAll(filter);
+
+    res.render('search', { movies, filter });
 });
 
 addMovieController.get('/:id/details', (req, res) => {
