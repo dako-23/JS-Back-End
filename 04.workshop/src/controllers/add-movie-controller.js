@@ -13,7 +13,11 @@ addMovieController.post('/create', (req, res) => {
     res.redirect('/');
 })
 
-addMovieController.get('/search', (req, res) => res.render('search'));
+addMovieController.get('/search', (req, res) => {
+    const movies = movieService.getAll();
+
+    res.render('search', { movies });
+});
 
 addMovieController.get('/:id/details', (req, res) => {
 

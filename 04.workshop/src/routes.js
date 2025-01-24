@@ -6,7 +6,6 @@ const routes = Router();
 
 routes.use(homeController)
 routes.use('/movies', addMovieController)
-// routes.use('/search', addMovieController);
 
 
 routes.get('*', (req, res) => res.render('404'));
