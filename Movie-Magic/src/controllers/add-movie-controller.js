@@ -5,9 +5,11 @@ import Movie from "../models/Movie.js";
 const addMovieController = Router();
 
 addMovieController.get('/create', (req, res) => res.render('create'));
-addMovieController.post('/create', async (req, res) => {
 
-    await Movie.create(req.body)
+addMovieController.post('/create', async (req, res) => {
+    const newMovie = req.body
+    
+    await movieService.create(newMovie)
 
     res.redirect('/');
 })
@@ -16,7 +18,6 @@ addMovieController.get('/search', async (req, res) => {
     const filter = req.query
 
     const movies = await movieService.getAll(filter);
-    console.log(movies);
 
     res.render('search', { movies, filter });
 });

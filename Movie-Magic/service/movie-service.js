@@ -1,19 +1,21 @@
 import Movie from '../src/models/Movie.js';
 
 export default {
-    async getAll(filter = {}) {
+    getAll(filter = {}) {
 
-        let data = await Movie.find({})
+        let data = Movie.find({})
 
-        // if (filter.search){
-        //     data = data.filter(movie => movie.title.toLowerCase().includes(filter.search.toLowerCase()))
-        // }
-        // if (filter.genre){
-        //     data = data.filter(movie => movie.genre.toLowerCase() === filter.genre.toLowerCase())
-        // }
-        // if (filter.year){
-        //     data = data.filter(movie => movie.year.toLowerCase() === filter.year.toLowerCase())
-        // }
+        if (filter.search) {
+            data = data.where({ title: filter.search })
+        }
+        if (filter.genre) {
+            data = data.where({ genre: filter.genre })
+
+        }
+        if (filter.year) {
+            data = data.where({ year: filter.year })
+
+        }
         return data
     },
     async getOne(id) {
@@ -25,11 +27,12 @@ export default {
     },
     create(movieData) {
 
-        const movies = this.getAll()
-
-        movies.push({
-
+        const result = Movie.create({
             ...movieData,
+            rating: Number(movieData.rating),
+            year: Number(movieData.year)
         })
+
+        return result
     }
 }
