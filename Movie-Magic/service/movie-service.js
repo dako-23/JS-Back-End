@@ -18,12 +18,11 @@ export default {
         }
         return data
     },
-    async getOne(id) {
+    getOne(id) {
 
-        const result = await Movie.findById(id)
+        const result = Movie.findById(id)
 
         return result
-
     },
     create(movieData) {
 
@@ -34,5 +33,13 @@ export default {
         })
 
         return result
+    },
+    async attachCast(movieId, castId) {
+        
+        const movie = await Movie.findById(movieId);
+        movie.casts.push(castId);
+        await movie.save();
+
+        return movie
     }
 }
