@@ -1,13 +1,15 @@
 import { Router } from "express";
 import movieService from "../../service/movie-service.js";
+import Movie from "../models/Movie.js";
 
 
 const homeController = Router();
 
-homeController.get('/', (req, res) => {
-    const movies = movieService.getAll();
+homeController.get('/', async (req, res) => {
+    const movies = await Movie.find({})
 
     res.render('home', { movies });
+
 })
 
 

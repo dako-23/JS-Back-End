@@ -1,31 +1,30 @@
 import { Router } from "express";
 import movieService from "../../service/movie-service.js";
+import Movie from "../models/Movie.js";
 
 const addMovieController = Router();
 
 addMovieController.get('/create', (req, res) => res.render('create'));
-addMovieController.post('/create', (req, res) => {
+addMovieController.post('/create', async (req, res) => {
 
-    const newMovie = req.body;
-
-    movieService.create(newMovie);
+    await Movie.create(req.body)
 
     res.redirect('/');
 })
 
-addMovieController.get('/search', (req, res) => {
+addMovieController.get('/search', async (req, res) => {
     const filter = req.query
 
-    const movies = movieService.getAll(filter);
+    const movies = await movieService.getAll(filter);
+    console.log(movies);
 
     res.render('search', { movies, filter });
 });
 
-addMovieController.get('/:id/details', (req, res) => {
+addMovieController.get('/:id/details', async (req, res) => {
 
-    const id = req.params.id;
-
-    const movie = movieService.findOne(id);
+    const id = req.params.id
+    const movie = await movieService.getOne(id);
 
     res.render('details', { movie });
 });

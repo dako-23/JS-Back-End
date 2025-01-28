@@ -1,49 +1,35 @@
-import fs from 'fs'
-import { v4 as uuid } from 'uuid';
-
-const dataPath = './src/config/database.json'
+import Movie from '../src/models/Movie.js';
 
 export default {
-    getAll(filter = {}) {
+    async getAll(filter = {}) {
 
-        try {
-            let data = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+        let data = await Movie.find({})
 
-            if (filter.search){
-                data = data.filter(movie => movie.title.toLowerCase().includes(filter.search.toLowerCase()))
-            }
-            if (filter.genre){
-                data = data.filter(movie => movie.genre.toLowerCase() === filter.genre.toLowerCase())
-            }
-            if (filter.year){
-                data = data.filter(movie => movie.year.toLowerCase() === filter.year.toLowerCase())
-            }
-                return data
-        } catch (err) {
-            return [];
-        }
-
+        // if (filter.search){
+        //     data = data.filter(movie => movie.title.toLowerCase().includes(filter.search.toLowerCase()))
+        // }
+        // if (filter.genre){
+        //     data = data.filter(movie => movie.genre.toLowerCase() === filter.genre.toLowerCase())
+        // }
+        // if (filter.year){
+        //     data = data.filter(movie => movie.year.toLowerCase() === filter.year.toLowerCase())
+        // }
+        return data
     },
-    saveMovie(movie) {
-        return fs.writeFileSync(dataPath, JSON.stringify(movie, null, 2), 'utf-8');
-    },
-    findOne(id) {
+    async getOne(id) {
 
-        const movies = this.getAll()
-
-        const result = movies.find(movie => movie.id == id);
+        const result = await Movie.findById(id)
 
         return result
+
     },
     create(movieData) {
-        const id = uuid()
 
         const movies = this.getAll()
 
         movies.push({
-            id,
+
             ...movieData,
         })
-        this.saveMovie(movies)
     }
 }
