@@ -6,14 +6,14 @@ export default {
         let data = Movie.find({})
 
         if (filter.search) {
-            data = data.where({ title: filter.search })
+            data = data.where({ title: { $regex: filter.search, $options: 'i' } });
         }
         if (filter.genre) {
-            data = data.where({ genre: filter.genre })
+            data = data.where({ genre: { $regex: filter.genre, $options: 'i' } });
 
         }
         if (filter.year) {
-            data = data.where({ year: filter.year })
+            data = data.where({ year: filter.year });
 
         }
         return data
