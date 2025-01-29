@@ -35,7 +35,6 @@ addMovieController.get('/:id/details', async (req, res) => {
 
     const id = req.params.id
     const movie = await movieService.getOne(id).populate('casts');
-    // console.log(movie);
 
     res.render('movies/details', { movie });
 });
@@ -44,7 +43,7 @@ addMovieController.get('/:id/attach-cast', async (req, res) => {
     const id = req.params.id
 
     const movie = await movieService.getOne(id)
-    const casts = await castService.getAll()
+    const casts = await castService.getAll({ exclude: movie.casts })
 
     res.render('movies/attach-cast', { movie, casts })
 })

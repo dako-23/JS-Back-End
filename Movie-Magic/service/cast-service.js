@@ -1,8 +1,12 @@
 import Cast from "../src/models/Cast.js";
 
 export default {
-    getAll() {
+    getAll(filter = {}) {
         let data = Cast.find({});
+
+        if (filter.exclude) {
+            data = data.nin('_id', filter.exclude)
+        }
 
         return data
     },
