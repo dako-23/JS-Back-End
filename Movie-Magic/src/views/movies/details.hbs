@@ -31,8 +31,8 @@
             <img src="{{movie.imageURL}}" alt="{{movie.title}}">
         </div>
     </div>
-    <div class="main-cast-card"> 
-    {{#each movie.casts}}
+    <div class="main-cast-card">
+        {{#each movie.casts}}
         <div class="cast-card">
             <div class="card-img">
                 <img src="{{imageUrl}}" alt="cast">
@@ -42,9 +42,11 @@
                 <h3>Age: {{age}}</h3>
                 <h3>Born: {{born}}</h3>
                 <h3>Name in Movie: {{nameInMovie}}</h3>
+            <a style="display: flex; justify-content: center;" href="/casts/{{id}}/delete" class="del-btn">Delete</a>
             </div>
+
         </div>
-    {{/each}}
+        {{/each}}
     </div>
 
 </section>

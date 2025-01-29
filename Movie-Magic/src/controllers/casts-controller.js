@@ -12,6 +12,6 @@ addCastController.post('/create', async (req, res) => {
     await castService.create(newCast)
 
     res.redirect('/');
-})
+});
 
 export default addCastController;

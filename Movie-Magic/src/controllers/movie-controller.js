@@ -37,7 +37,6 @@ addMovieController.get('/:id/details', async (req, res) => {
     const movie = await movieService.getOne(id).populate('casts');
     // console.log(movie);
 
-
     res.render('movies/details', { movie });
 });
 
