@@ -34,6 +34,12 @@ export default {
 
         return result
     },
+    delete(id){
+
+        const result = Movie.findByIdAndDelete(id)
+        
+        return result
+    },
     async attachCast(movieId, castId) {
         
         const movie = await Movie.findById(movieId);

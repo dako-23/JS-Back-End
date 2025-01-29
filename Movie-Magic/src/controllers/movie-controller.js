@@ -14,6 +14,15 @@ addMovieController.post('/create', async (req, res) => {
     res.redirect('/');
 })
 
+addMovieController.get('/:id/delete', async (req, res) => {
+
+    const id = req.params.id
+
+    await movieService.delete(id)
+
+    res.redirect('/')
+})
+
 addMovieController.get('/search', async (req, res) => {
     const filter = req.query
 
@@ -27,7 +36,7 @@ addMovieController.get('/:id/details', async (req, res) => {
     const id = req.params.id
     const movie = await movieService.getOne(id).populate('casts');
     // console.log(movie);
-    
+
 
     res.render('movies/details', { movie });
 });
