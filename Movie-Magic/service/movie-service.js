@@ -34,18 +34,21 @@ export default {
 
         return result
     },
-    delete(id){
+    delete(id) {
 
         const result = Movie.findByIdAndDelete(id)
-        
+
         return result
     },
     async attachCast(movieId, castId) {
-        
-        const movie = await Movie.findById(movieId);
-        movie.casts.push(castId);
-        await movie.save();
 
-        return movie
+        // const movie = await Movie.findById(movieId);
+        // movie.casts.push(castId);
+        // await movie.save();
+
+        // return movie
+
+        const movie = await Movie.findByIdAndUpdate(movieId, { $push: { casts: castId } })
+        return movie;
     }
 }
