@@ -26,6 +26,10 @@
                     <a href="/movies/{{movie.id}}/attach-cast" class="details" id="create-cast">Attach cast</a>
                 </div>
             </div>
+            <div class="details-btn">
+                <button id="edit-button">Edit</button>
+                <button id="delete-button">Delete</button>
+            </div>
         </div>
         <div class="card_right">
             <img src="{{movie.imageURL}}" alt="{{movie.title}}">
@@ -42,9 +46,13 @@
                 <h3>Age: {{age}}</h3>
                 <h3>Born: {{born}}</h3>
                 <h3>Name in Movie: {{nameInMovie}}</h3>
-            <a style="display: flex; justify-content: center;" href="/casts/{{id}}/delete" class="del-btn">Delete</a>
+                <a style="display: flex; justify-content: center;" href="/casts/{{id}}/delete"
+                    class="del-btn">Delete</a>
             </div>
-
+        </div>
+        {{else}}
+        <div class="no-cast">
+            <p>There are no casts added yet...</p>
         </div>
         {{/each}}
     </div>
