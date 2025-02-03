@@ -7,7 +7,7 @@ import userController from './controllers/user-controller.js';
 const routes = Router();
 
 routes.use(homeController)
-routes.use(userController)
+routes.use('/user', userController)
 routes.use('/movies', addMovieController)
 routes.use('/casts', addCastController)
 

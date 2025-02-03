@@ -7,5 +7,9 @@ export default {
             ...userData,
         })
         return result
+    },
+    getUser(email) {
+        return User.findOne({ email: email })
+
     }
 }
