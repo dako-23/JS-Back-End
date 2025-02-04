@@ -3,6 +3,8 @@ import handlebars from 'express-handlebars';
 import routes from './routes.js';
 import showRating from './helpers/rating-helper.js';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
+import { authMiddleware } from './middlewares/auth-middleware.js';
 
 //setup server
 const app = express();
@@ -37,6 +39,8 @@ app.set('views', './src/views')
 //setup express
 app.use(express.static('src/public'));
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(authMiddleware);
 
 //setup roots
 app.use(routes)

@@ -1,14 +1,7 @@
 import { Router } from "express"
-import cookieParser from "cookie-parser";
-import expressSession from 'express-session';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import userService from "../../service/user-service.js";
 
-// import user service
-
 const userController = Router();
-const secret = 'DAKO'
 
 userController.get('/register', (req, res) => { res.render('users/register') });
 
@@ -25,19 +18,19 @@ userController.get('/login', (req, res) => { res.render('users/login') });
 userController.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-    const userData = await userService.getUser(email)
+    try {
+        const token = await userService.login(email, password);
 
-    const isValid = userData.email === email && await bcrypt.compare(password, userData.password);
+        res.cookie('auth', token, {httpOnly: true})
+        res.redirect('/')
 
-    if (!isValid) {
-        console.log('Invalid password');
+    } catch (err) {
+        console.log(err.message);
+        return res.redirect('/404')
     }
 
-    const token = jwt.sign({ email }, secret, { expiresIn: '2h' });
 
-    res.cookie('authorization', token);
 
-    res.redirect('/')
 })
 
 export default userController;

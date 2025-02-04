@@ -21,15 +21,19 @@
 
                 <p class="disc">Description: {{movie.description}}</p>
                 <p class="card-category">Category: {{movie.category}}</p>
-
+                {{#if isCreator}}
                 <div style="display: flex; justify-content: center;">
                     <a href="/movies/{{movie.id}}/attach-cast" class="details" id="create-cast">Attach cast</a>
+                    <a href="/movies/{{movie.id}}/delete" class="details" id="delete">Delete</a>
+                    <a href="/movies/{{movie.id}}/edit" class="details" id="edit">Edit</a>
                 </div>
+            {{/if}}
             </div>
-            <div class="details-btn">
-                <button id="edit-button">Edit</button>
-                <button id="delete-button">Delete</button>
-            </div>
+
+            {{!-- <div class="details-btn">
+                <a href="/movies/{{movie.id}}/edit" id="edit-button">Edit</a>
+                <a href="/movies/{{movie.id}}/delete" id="delete-button">Delete</a>
+            </div> --}}
         </div>
         <div class="card_right">
             <img src="{{movie.imageURL}}" alt="{{movie.title}}">

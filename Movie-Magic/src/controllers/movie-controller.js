@@ -8,8 +8,9 @@ addMovieController.get('/create', (req, res) => res.render('create'));
 
 addMovieController.post('/create', async (req, res) => {
     const newMovie = req.body
+    const creatorId = req.user?.id
 
-    await movieService.create(newMovie)
+    await movieService.create(newMovie, creatorId)
 
     res.redirect('/');
 })
@@ -36,7 +37,9 @@ addMovieController.get('/:id/details', async (req, res) => {
     const id = req.params.id
     const movie = await movieService.getOne(id).populate('casts');
 
-    res.render('movies/details', { movie });
+    const isCreator = movie.creator == req.user?.id
+
+    res.render('movies/details', { movie, isCreator });
 });
 
 addMovieController.get('/:id/attach-cast', async (req, res) => {
