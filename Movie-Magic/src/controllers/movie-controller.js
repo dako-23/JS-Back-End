@@ -19,6 +19,12 @@ addMovieController.get('/:id/delete', async (req, res) => {
 
     const id = req.params.id
 
+    const movie = await movieService.getOne(id)
+
+    if (movie.creator !== req.user?.id) {
+        return res.redirect('/404')
+    }
+
     await movieService.delete(id)
 
     res.redirect('/')
@@ -58,6 +64,16 @@ addMovieController.post('/:id/attach-cast', async (req, res) => {
     await movieService.attachCast(movieId, castId)
 
     res.redirect(`/movies/${movieId}/details`)
+})
+
+addMovieController.get('/:id/edit', async (req, res) => {
+    const movieId = req.params.id
+    const movie = await movieService.getOne(movieId)
+
+    console.log(movie);
+
+
+    res.render('movies/edit', { movie })
 })
 
 export default addMovieController;
