@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken'
-// import 'dotenv/config';
+import 'dotenv/config';
 
 const secret = process.env.JWT_SECRET;
 
 export const authMiddleware = (req, res, next) => {
-
     const token = req.cookies['auth']
 
     if (!token) {
@@ -13,14 +12,20 @@ export const authMiddleware = (req, res, next) => {
 
     try {
         const decodedToken = jwt.verify(token, secret)
+
         req.user = decodedToken;
         res.locals.user = decodedToken
 
-        return next()
+        next()
     } catch (err) {
-
         res.clearCookie('auth')
         res.redirect('/user/login')
+    }
+}
+
+export const isAuth = (req, res, next) => {
+    if (!req.user) {
+        return res.redirect('/user/login');
     }
 
     next();

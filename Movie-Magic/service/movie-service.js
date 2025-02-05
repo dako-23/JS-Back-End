@@ -50,5 +50,9 @@ export default {
 
         const movie = await Movie.findByIdAndUpdate(movieId, { $push: { casts: castId } })
         return movie;
+    },
+    async update(movieId, movieData) {
+
+        return await Movie.findByIdAndUpdate(movieId, movieData);
     }
 }

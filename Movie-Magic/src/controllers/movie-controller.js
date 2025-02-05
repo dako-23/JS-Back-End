@@ -1,12 +1,13 @@
 import { Router } from "express";
 import movieService from "../../service/movie-service.js";
 import castService from "../../service/cast-service.js";
+import { isAuth } from "../middlewares/auth-middleware.js";
 
 const addMovieController = Router();
 
 addMovieController.get('/create', (req, res) => res.render('create'));
 
-addMovieController.post('/create', async (req, res) => {
+addMovieController.post('/create', isAuth, async (req, res) => {
     const newMovie = req.body
     const creatorId = req.user?.id
 
@@ -15,7 +16,7 @@ addMovieController.post('/create', async (req, res) => {
     res.redirect('/');
 })
 
-addMovieController.get('/:id/delete', async (req, res) => {
+addMovieController.get('/:id/delete', isAuth, async (req, res) => {
 
     const id = req.params.id
 
@@ -48,7 +49,7 @@ addMovieController.get('/:id/details', async (req, res) => {
     res.render('movies/details', { movie, isCreator });
 });
 
-addMovieController.get('/:id/attach-cast', async (req, res) => {
+addMovieController.get('/:id/attach-cast', isAuth, async (req, res) => {
     const id = req.params.id
 
     const movie = await movieService.getOne(id)
@@ -57,7 +58,7 @@ addMovieController.get('/:id/attach-cast', async (req, res) => {
     res.render('movies/attach-cast', { movie, casts })
 })
 
-addMovieController.post('/:id/attach-cast', async (req, res) => {
+addMovieController.post('/:id/attach-cast', isAuth, async (req, res) => {
     const castId = req.body.cast
     const movieId = req.params.id
 
@@ -66,14 +67,20 @@ addMovieController.post('/:id/attach-cast', async (req, res) => {
     res.redirect(`/movies/${movieId}/details`)
 })
 
-addMovieController.get('/:id/edit', async (req, res) => {
+addMovieController.get('/:id/edit', isAuth, async (req, res) => {
     const movieId = req.params.id
     const movie = await movieService.getOne(movieId)
 
-    console.log(movie);
-
-
     res.render('movies/edit', { movie })
+})
+
+addMovieController.post('/:id/edit', isAuth, async (req, res) => {
+    const movieData = req.body
+    const movieId = req.params.id
+
+    await movieService.update(movieId, movieData)
+
+    res.redirect(`/movies/${movieId}/details`)
 })
 
 export default addMovieController;

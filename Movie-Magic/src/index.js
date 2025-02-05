@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { authMiddleware } from './middlewares/auth-middleware.js';
 
+
 //setup server
 const app = express();
 
