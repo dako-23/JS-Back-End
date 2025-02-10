@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import 'dotenv/config';
 
+
 const secret = process.env.JWT_SECRET;
 
 export const authMiddleware = (req, res, next) => {
@@ -18,6 +19,7 @@ export const authMiddleware = (req, res, next) => {
 
         next()
     } catch (err) {
+        res.setError('You are not authorize')
         res.clearCookie('auth')
         res.redirect('/user/login')
     }

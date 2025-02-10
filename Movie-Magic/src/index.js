@@ -1,10 +1,12 @@
 import express from 'express';
+import expressSession from 'express-session'
 import handlebars from 'express-handlebars';
 import routes from './routes.js';
 import showRating from './helpers/rating-helper.js';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { authMiddleware } from './middlewares/auth-middleware.js';
+import { tempData } from './middlewares/tempData-middleware.js';
 
 
 //setup server
@@ -41,6 +43,16 @@ app.set('views', './src/views')
 app.use(express.static('src/public'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(expressSession({
+    secret: 'asdasdasdasd',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        httpOnly: true
+    }
+}))
+app.use(tempData);
 app.use(authMiddleware);
 
 //setup roots

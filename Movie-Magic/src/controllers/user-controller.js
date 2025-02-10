@@ -1,6 +1,7 @@
 import { Router } from "express"
 import userService from "../../service/user-service.js";
 import { isAuth } from "../middlewares/auth-middleware.js";
+import { gotErrorMessage } from "../utils/error-utils.js";
 
 const userController = Router();
 
@@ -9,7 +10,12 @@ userController.get('/register', (req, res) => { res.render('users/register') });
 userController.post('/register', async (req, res) => {
     const userData = req.body;
 
-    await userService.register(userData)
+    try {
+        await userService.register(userData)
+    } catch (err) {
+        return res.render('users/register', { email: userData.email, error: gotErrorMessage(err) })
+
+    }
 
     res.redirect('/user/login')
 });
@@ -26,8 +32,8 @@ userController.post('/login', async (req, res) => {
         res.redirect('/')
 
     } catch (err) {
-        console.log(err.message);
-        return res.redirect('/404')
+
+        return res.render('users/login', { email, error: gotErrorMessage(err) })
     }
 })
 

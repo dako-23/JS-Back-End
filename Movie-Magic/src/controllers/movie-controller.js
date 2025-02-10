@@ -2,6 +2,7 @@ import { Router } from "express";
 import movieService from "../../service/movie-service.js";
 import castService from "../../service/cast-service.js";
 import { isAuth } from "../middlewares/auth-middleware.js";
+import { gotErrorMessage } from "../utils/error-utils.js";
 
 
 const addMovieController = Router();
@@ -11,8 +12,12 @@ addMovieController.get('/create', (req, res) => res.render('create'));
 addMovieController.post('/create', isAuth, async (req, res) => {
     const newMovie = req.body
     const creatorId = req.user?.id
+    try {
+        await movieService.create(newMovie, creatorId)
 
-    await movieService.create(newMovie, creatorId)
+    } catch (err) {
+        return res.render('create', { movie: newMovie, error: gotErrorMessage(err) })
+    }
 
     res.redirect('/');
 })
@@ -48,7 +53,14 @@ addMovieController.post('/:id/attach-cast', isAuth, async (req, res) => {
     const castId = req.body.cast
     const movieId = req.params.id
 
-    await movieService.attachCast(movieId, castId)
+    try {
+        await movieService.attachCast(movieId, castId)
+
+    } catch (err) {
+        res.setError(gotErrorMessage(err))
+        return res.redirect(`/movies/${movieId}/details`)
+
+    }
 
     res.redirect(`/movies/${movieId}/details`)
 })
@@ -78,7 +90,12 @@ addMovieController.post('/:id/edit', isAuth, async (req, res) => {
     const movieData = req.body
     const movieId = req.params.id
 
-    await movieService.update(movieId, movieData)
+    try {
+        await movieService.update(movieId, movieData)
+    } catch (err) {
+        // res.setError(gotErrorMessage(err))
+        return res.render(`movies/edit`, { movie: movieData, error: gotErrorMessage(err) })
+    }
 
     res.redirect(`/movies/${movieId}/details`)
 })

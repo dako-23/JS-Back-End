@@ -51,8 +51,8 @@ const movieSchema = new Schema({
     },
     description: {
         type: String,
-        // minLength: [20, 'Description should be alphanumerical, digits and whitespaces only!'],
-        match: [/^[a-zA-Z 0-9]+$/, 'Director should be alphanumeric, digits and whitespaces only!']
+        minLength: [20, 'Description should be at least 20 characters long'],
+        match: [/^[a-zA-Z 0-9]+$/, 'Description should be alphanumeric, digits and whitespaces only!']
     },
     casts: [{
         type: Types.ObjectId,
