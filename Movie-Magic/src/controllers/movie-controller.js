@@ -3,6 +3,7 @@ import movieService from "../../service/movie-service.js";
 import castService from "../../service/cast-service.js";
 import { isAuth } from "../middlewares/auth-middleware.js";
 
+
 const addMovieController = Router();
 
 addMovieController.get('/create', (req, res) => res.render('create'));
@@ -14,21 +15,6 @@ addMovieController.post('/create', isAuth, async (req, res) => {
     await movieService.create(newMovie, creatorId)
 
     res.redirect('/');
-})
-
-addMovieController.get('/:id/delete', isAuth, async (req, res) => {
-
-    const id = req.params.id
-
-    const movie = await movieService.getOne(id)
-
-    if (movie.creator !== req.user?.id) {
-        return res.redirect('/404')
-    }
-
-    await movieService.delete(id)
-
-    res.redirect('/')
 })
 
 addMovieController.get('/search', async (req, res) => {
@@ -65,6 +51,20 @@ addMovieController.post('/:id/attach-cast', isAuth, async (req, res) => {
     await movieService.attachCast(movieId, castId)
 
     res.redirect(`/movies/${movieId}/details`)
+})
+
+addMovieController.get('/:id/delete', isAuth, async (req, res) => {
+
+    const MovieId = req.params.id
+    const movie = await movieService.getOne(MovieId)
+
+    if (movie.creator.toString() !== req.user?.id) {
+        return res.redirect('/404')
+    }
+
+    await movieService.delete(MovieId)
+
+    res.redirect('/')
 })
 
 addMovieController.get('/:id/edit', isAuth, async (req, res) => {

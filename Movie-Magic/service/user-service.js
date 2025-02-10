@@ -6,12 +6,18 @@ import 'dotenv/config';
 const secret = process.env.JWT_SECRET;
 
 export default {
-    register(userData) {
+    async register(userData) {
 
-        const result = User.create({
-            ...userData,
-        })
-        return result
+        const userCount = await User.countDocuments({ email: userData.email })
+        // if (userData.password !== userData.rePassword) {
+        //     throw new Error('Password missmatch!')
+        // }
+
+        if (userCount !== 0) {
+            throw new Error('This email is already exist');
+        }
+
+        return User.create(userData)
     },
     async login(email, password) {
 

@@ -1,7 +1,11 @@
 import { Schema, model } from "mongoose";
 
 const castSchema = new Schema({
-    name: String,
+    name: {
+        type: String,
+        require: true,
+        
+    },
     age: Number,
     born: String,
     nameInMovie: String,

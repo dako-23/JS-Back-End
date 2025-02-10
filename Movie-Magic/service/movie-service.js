@@ -33,11 +33,13 @@ export default {
             creator: creatorId,
         })
 
-        return result
+        return result;
     },
     delete(id) {
 
         return Movie.findByIdAndDelete(id)
+    },
+    async deleteCast(id) {
 
     },
     async attachCast(movieId, castId) {

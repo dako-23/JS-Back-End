@@ -1,4 +1,5 @@
 import Cast from "../src/models/Cast.js";
+import Movie from "../src/models/Movie.js";
 
 export default {
     getAll(filter = {}) {
@@ -21,5 +22,5 @@ export default {
         })
 
         return result
-    }
+    },
 }

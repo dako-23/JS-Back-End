@@ -9,7 +9,7 @@ userController.get('/register', (req, res) => { res.render('users/register') });
 userController.post('/register', async (req, res) => {
     const userData = req.body;
 
-    userService.register(userData)
+    await userService.register(userData)
 
     res.redirect('/user/login')
 });
