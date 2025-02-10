@@ -32,15 +32,14 @@ userController.post('/login', async (req, res) => {
         res.redirect('/')
 
     } catch (err) {
-
         return res.render('users/login', { email, error: gotErrorMessage(err) })
     }
-})
+});
 
 userController.get('/logout', isAuth, (req, res) => {
-
     res.clearCookie('auth');
+
     res.redirect('/')
-})
+});
 
 export default userController;

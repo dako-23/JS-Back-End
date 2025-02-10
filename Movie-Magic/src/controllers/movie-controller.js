@@ -4,7 +4,6 @@ import castService from "../../service/cast-service.js";
 import { isAuth } from "../middlewares/auth-middleware.js";
 import { gotErrorMessage } from "../utils/error-utils.js";
 
-
 const addMovieController = Router();
 
 addMovieController.get('/create', (req, res) => res.render('create'));
@@ -35,7 +34,7 @@ addMovieController.get('/:id/details', async (req, res) => {
     const id = req.params.id
     const movie = await movieService.getOne(id).populate('casts');
 
-    const isCreator = movie.creator == req.user?.id
+    const isCreator = movie.creator?.equals(req.user?.id);
 
     res.render('movies/details', { movie, isCreator });
 });
@@ -71,6 +70,7 @@ addMovieController.get('/:id/delete', isAuth, async (req, res) => {
     const movie = await movieService.getOne(MovieId)
 
     if (movie.creator.toString() !== req.user?.id) {
+        res.setError('You are not the movie owner!')
         return res.redirect('/404')
     }
 
@@ -83,7 +83,9 @@ addMovieController.get('/:id/edit', isAuth, async (req, res) => {
     const movieId = req.params.id
     const movie = await movieService.getOne(movieId)
 
-    res.render('movies/edit', { movie })
+    const categories = getCategoriesViewData(movie.category);
+
+    res.render('movies/edit', { movie, categories })
 })
 
 addMovieController.post('/:id/edit', isAuth, async (req, res) => {
@@ -93,11 +95,30 @@ addMovieController.post('/:id/edit', isAuth, async (req, res) => {
     try {
         await movieService.update(movieId, movieData)
     } catch (err) {
+        const categories = getCategoriesViewData(movieData.category);
         // res.setError(gotErrorMessage(err))
-        return res.render(`movies/edit`, { movie: movieData, error: gotErrorMessage(err) })
+        return res.render(`movies/edit`, { movie: movieData, categories, error: gotErrorMessage(err) })
     }
 
     res.redirect(`/movies/${movieId}/details`)
-})
+});
+
+function getCategoriesViewData(category) {
+    const categoriesMap = {
+        'tv-show': 'TV Show',
+        'animation': 'Animation',
+        'movie': 'Movie',
+        'documentary': 'Documentary',
+        'short-film': 'Short Film',
+    };
+
+    const categories = Object.keys(categoriesMap).map(value => ({
+        value,
+        label: categoriesMap[value],
+        selected: value === category ? 'selected' : '',
+    }))
+
+    return categories;
+}
 
 export default addMovieController;
