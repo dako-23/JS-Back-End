@@ -91,6 +91,8 @@ addMovieController.get('/:id/edit', isAuth, async (req, res) => {
 addMovieController.post('/:id/edit', isAuth, async (req, res) => {
     const movieData = req.body
     const movieId = req.params.id
+    console.log(movieId);
+
 
     try {
         await movieService.update(movieId, movieData)
